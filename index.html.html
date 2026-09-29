@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المتجر الشامل للألعاب | PlayStore & Steam</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #1e293b;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #334155;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #38bdf8;
+        }
+
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #f1f5f9;
+        }
+
+        .hero p {
+            color: #94a3b8;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #38bdf8;
+            margin: 2rem 0 1rem 0;
+            border-right: 4px solid #38bdf8;
+            padding-right: 10px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+
+        .game-card {
+            background-color: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #334155;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #0f172a;
+        }
+
+        .game-info {
+            padding: 1.2rem;
+            flex: 1;
+        }
+
+        .game-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #f8fafc;
+        }
+
+        .game-info p {
+            color: #94a3b8;
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+
+        .platform-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+        .tag-playstore { background-color: #15803d; color: white; }
+        .tag-steam { background-color: #0284c7; color: white; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background-color: #1e293b;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 100%;
+            padding: 1.5rem;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid #475569;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.8rem;
+            color: #94a3b8;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+            color: #38bdf8;
+        }
+
+        .modal-description {
+            color: #cbd5e1;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            background-color: #000;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .btn-action {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+            color: white;
+        }
+
+        .btn-playstore { background-color: #22c55e; }
+        .btn-playstore:hover { background-color: #16a34a; }
+
+        .btn-steam { background-color: #0ea5e9; }
+        .btn-steam:hover { background-color: #0284c7; }
+
+        footer {
+            background-color: #0f172a;
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid #1e293b;
+            color: #64748b;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">🕹️ GameHub</div>
+        <nav>
+            <ul>
+                <li><a href="#">الرئيسية</a></li>
+                <li><a href="#playstore">ألعاب Play Store</a></li>
+                <li><a href="#steam">ألعاب Steam</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>أفضل ألعاب بلاي ستور و ستيم</h1>
+            <p>انقر على أي لعبة لمشاهدة فيديو الجيم بلاي والذهاب لرابط التحميل الرسمي</p>
+        </section>
+
+        <!-- قسم ألعاب Play Store -->
+        <h2 id="playstore" class="section-title">📱 ألعاب Google Play Store</h2>
+        <section class="games-grid">
+            
+            <!-- Free Fire -->
+            <div class="game-card" onclick="openModal('Garena Free Fire', 'لعبة باتل رويال حماسية للهواتف. ينزل 50 لاعباً في جزيرة مهجورة ويبحثون عن الأسلحة والمعدات للبقاء على قيد الحياة حتى النهاية.', 'https://www.youtube.com/embed/14dM23zI3yE', 'https://play.google.com/store/apps/details?id=com.dts.freefireth', 'playstore')">
+                <img src="https://m.media-amazon.com/images/M/MV5BMzlhYjMwYTgtMzc2Mi00Y2I1LTg2N2EtYmFiYmMxMTllYmJhXkEyXkFqcGc@._V1_.jpg" alt="Free Fire">
+                <div class="game-info">
+                    <h3>Garena Free Fire</h3>
+                    <p>احارب من أجل البقاء في مواجهات سريعة ضد 50 لاعباً.</p>
+                    <span class="platform-tag tag-playstore">Google Play</span>
+                </div>
+            </div>
+
+            <!-- eFootball PES -->
+            <div class="game-card" onclick="openModal('eFootball Mobile', 'محاكي كرة القدم الشهير من Konami. استمتع برسوميات واقعية وتحكم سلس وقم ببناء فريق أحلامك بأبرز نجوم العالم.', 'https://www.youtube.com/embed/5a3jN19HqQc', 'https://play.google.com/store/apps/details?id=jp.konami.pesam', 'playstore')">
+                <img src="https://gamingonphone.com/wp-content/uploads/2023/09/eFootball-2024-Mobile-cover.jpg" alt="eFootball PES">
+                <div class="game-info">
+                    <h3>eFootball PES Mobile</h3>
+                    <p>تجربة كرة قدم حقيقية ومباريات حماسية أونلاين.</p>
+                    <span class="platform-tag tag-playstore">Google Play</span>
+                </div>
+            </div>
+
+            <!-- FIFA Mobile -->
+            <div class="game-card" onclick="openModal('EA SPORTS FC Mobile (FIFA)', 'ابنِ فريقك المفضل في لعبة EA SPORTS FC Mobile، ونافس في البطولات العالمية مع تحديثات ومواسم مستمرة.', 'https://www.youtube.com/embed/qK75fXpYJzM', 'https://play.google.com/store/apps/details?id=com.ea.gp.fifamobile', 'playstore')">
+                <img src="https://drop.ndtv.com/TECH/product_database/images/928202372728PM_635_ea_sports_fc_mobile.jpeg" alt="FIFA Mobile">
+                <div class="game-info">
+                    <h3>EA SPORTS FC Mobile</h3>
+                    <p>لعبة كرة القدم الرسمية ببطولات وترخيصات عالمية.</p>
+                    <span class="platform-tag tag-playstore">Google Play</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- قسم ألعاب Steam -->
+        <h2 id="steam" class="section-title">💻 ألعاب Steam للكمبيوتر</h2>
+        <section class="games-grid">
+            
+            <!-- EA SPORTS FC 27 -->
+            <div class="game-card" onclick="openModal('EA SPORTS FC 27', 'أحدث إصدارات سلسلة كرة القدم الشهيرة على الكمبيوتر بجرافيك فائق ومحاكاة تكتيكية متطورة وميزات أونلاين محسنة.', 'https://www.youtube.com/embed/XhP3Xh4L2mA', 'https://store.steampowered.com/app/2195250/EA_SPORTS_FC_24/', 'steam')">
+                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/2195250/header.jpg" alt="EA SPORTS FC">
+                <div class="game-info">
+                    <h3>EA SPORTS FC 27</h3>
+                    <p>تجربة الجيل الجديد لبطولات كرة القدم للكمبيوتر.</p>
+                    <span class="platform-tag tag-steam">Steam</span>
+                </div>
+            </div>
+
+            <!-- PES 2027 -->
+            <div class="game-card" onclick="openModal('eFootball 2027 (PES)', 'نسخة الكمبيوتر من لعبة Konami لكرة القدم. تحسينات كبيرة في أسلوب اللعب والفيزياء والملاعب ثلاثية الأبعاد.', 'https://www.youtube.com/embed/Jm2q3aB9FqA', 'https://store.steampowered.com/app/1665460/eFootball/', 'steam')">
+                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1665460/header.jpg" alt="PES 2027">
+                <div class="game-info">
+                    <h3>eFootball 2027 (PES)</h3>
+                    <p>محاكاة جبارة للعبة كرة القدم على منصة ستيم.</p>
+                    <span class="platform-tag tag-steam">Steam</span>
+                </div>
+            </div>
+
+            <!-- Human Fall Flat -->
+            <div class="game-card" onclick="openModal('Human Fall Flat', 'لعبة ألغاز وفيزياء مضحكة وممتعة جداً، يمكنك لعبها فردياً أو مع أصدقائك لتجاوز العقبات في عوالم غريبة.', 'https://www.youtube.com/embed/2_84X9JjFmg', 'https://store.steampowered.com/app/477160/Human_Fall_Flat/', 'steam')">
+                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/477160/header.jpg" alt="Human Fall Flat">
+                <div class="game-info">
+                    <h3>Human: Fall Flat</h3>
+                    <p>لعبة فيزياء وألغاز جماعية مليئة بالمرح والضحك.</p>
+                    <span class="platform-tag tag-steam">Steam</span>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Modal Popup Window -->
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <h2 id="modalTitle" class="modal-title">اسم اللعبة</h2>
+            <p id="modalDescription" class="modal-description">وصف اللعبة سيظهر هنا...</p>
+            
+            <div class="video-container">
+                <iframe id="modalVideo" src="" title="Gameplay Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+
+            <a id="modalDownload" href="#" target="_blank" class="btn-action">رابط اللعبة 🚀</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 جميع الحقوق محفوظة - متجر الألعاب</p>
+    </footer>
+
+    <script>
+        function openModal(title, description, videoUrl, storeLink, platform) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDescription').innerText = description;
+            
+            document.getElementById('modalVideo').src = videoUrl + "?autoplay=1";
+            
+            let downloadBtn = document.getElementById('modalDownload');
+            downloadBtn.href = storeLink;
+
+            if (platform === 'playstore') {
+                downloadBtn.innerText = 'تحميل اللعبة من Google Play Store 🟢';
+                downloadBtn.className = 'btn-action btn-playstore';
+            } else {
+                downloadBtn.innerText = 'فتح صفحة اللعبة على Steam 🔵';
+                downloadBtn.className = 'btn-action btn-steam';
+            }
+            
+            document.getElementById('gameModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('gameModal').style.display = 'none';
+            document.getElementById('modalVideo').src = '';
+        }
+
+        window.onclick = function(event) {
+            let modal = document.getElementById('gameModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
