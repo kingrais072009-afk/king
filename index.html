@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المتجر الشامل للألعاب | PlayStore & Steam</title>
+    <title>GameHub | المتجر الشامل للألعاب</title>
     <style>
         * {
             box-sizing: border-box;
@@ -33,15 +33,18 @@
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: bold;
             color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         nav ul {
             display: flex;
             list-style: none;
-            gap: 1.5rem;
+            gap: 1.2rem;
         }
 
         nav a {
@@ -57,38 +60,98 @@
 
         main {
             padding: 2rem;
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
             flex: 1;
+            width: 100%;
         }
 
         .hero {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .hero h1 {
-            font-size: 2.2rem;
+            font-size: 2.3rem;
             margin-bottom: 0.5rem;
             color: #f1f5f9;
         }
 
         .hero p {
             color: #94a3b8;
+            margin-bottom: 1.5rem;
         }
 
+        /* Search & Controls */
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background-color: #1e293b;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: #38bdf8;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .filter-btn {
+            background-color: #1e293b;
+            color: #cbd5e1;
+            border: 1px solid #334155;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: #38bdf8;
+            color: #0f172a;
+            border-color: #38bdf8;
+        }
+
+        /* Sections */
         .section-title {
             font-size: 1.6rem;
             color: #38bdf8;
-            margin: 2rem 0 1rem 0;
+            margin: 2.5rem 0 1.2rem 0;
             border-right: 4px solid #38bdf8;
             padding-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
         }
 
         .game-card {
@@ -100,6 +163,7 @@
             transition: transform 0.3s, box-shadow 0.3s;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .game-card:hover {
@@ -109,7 +173,7 @@
 
         .game-card img {
             width: 100%;
-            height: 200px;
+            height: 180px;
             object-fit: cover;
             background-color: #0f172a;
         }
@@ -117,18 +181,37 @@
         .game-info {
             padding: 1.2rem;
             flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .game-info h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
             color: #f8fafc;
         }
 
-        .game-info p {
-            color: #94a3b8;
-            font-size: 0.88rem;
-            line-height: 1.4;
+        .game-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .rating {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        .price-badge {
+            background-color: #334155;
+            color: #38bdf8;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
         }
 
         .platform-tag {
@@ -138,11 +221,14 @@
             border-radius: 4px;
             margin-top: 8px;
             font-weight: bold;
+            width: fit-content;
         }
 
         .tag-playstore { background-color: #15803d; color: white; }
         .tag-steam { background-color: #0284c7; color: white; }
+        .tag-epic { background-color: #d97706; color: white; }
 
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -186,15 +272,29 @@
 
         .modal-title {
             font-size: 1.8rem;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
             color: #38bdf8;
         }
 
         .modal-description {
             color: #cbd5e1;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
             line-height: 1.6;
             font-size: 0.95rem;
+        }
+
+        .sys-req {
+            background-color: #0f172a;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.2rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            border: 1px solid #334155;
+        }
+
+        .sys-req strong {
+            color: #38bdf8;
         }
 
         .video-container {
@@ -203,7 +303,7 @@
             height: 0;
             overflow: hidden;
             border-radius: 8px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             background-color: #000;
         }
 
@@ -216,17 +316,24 @@
             border: 0;
         }
 
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
         .btn-action {
             display: inline-block;
-            width: 100%;
+            flex: 1;
             text-align: center;
-            padding: 0.8rem 1.5rem;
+            padding: 0.8rem 1rem;
             text-decoration: none;
             font-weight: bold;
             border-radius: 8px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: background-color 0.3s;
             color: white;
+            border: none;
+            cursor: pointer;
         }
 
         .btn-playstore { background-color: #22c55e; }
@@ -234,6 +341,16 @@
 
         .btn-steam { background-color: #0ea5e9; }
         .btn-steam:hover { background-color: #0284c7; }
+
+        .btn-epic { background-color: #f59e0b; color: #0f172a; }
+        .btn-epic:hover { background-color: #d97706; }
+
+        .btn-share {
+            background-color: #475569;
+            width: auto;
+            padding: 0.8rem 1.2rem;
+        }
+        .btn-share:hover { background-color: #64748b; }
 
         footer {
             background-color: #0f172a;
@@ -243,6 +360,29 @@
             color: #64748b;
             margin-top: auto;
         }
+
+        /* Scroll to top button */
+        .top-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #38bdf8;
+            color: #0f172a;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .top-btn:hover { opacity: 1; }
     </style>
 </head>
 <body>
@@ -251,90 +391,243 @@
         <div class="logo">🕹️ GameHub</div>
         <nav>
             <ul>
-                <li><a href="#">الرئيسية</a></li>
-                <li><a href="#playstore">ألعاب Play Store</a></li>
-                <li><a href="#steam">ألعاب Steam</a></li>
+                <li><a href="#featured">المميزة</a></li>
+                <li><a href="#playstore">Play Store</a></li>
+                <li><a href="#steam">Steam</a></li>
+                <li><a href="#epic">Epic Games</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <section class="hero">
-            <h1>أفضل ألعاب بلاي ستور و ستيم</h1>
-            <p>انقر على أي لعبة لمشاهدة فيديو الجيم بلاي والذهاب لرابط التحميل الرسمي</p>
+            <h1>المتجر الشامل لأفضل الألعاب</h1>
+            <p>تصفح أحدث وأقوى الألعاب لمنصات جوجل بلاي، ستيم، وإيبيك جيمز مع فيديوهات الجيم بلاي وروابط التحميل المباشرة</p>
         </section>
 
-        <!-- قسم ألعاب Play Store -->
-        <h2 id="playstore" class="section-title">📱 ألعاب Google Play Store</h2>
-        <section class="games-grid">
-            
-            <!-- Free Fire -->
-            <div class="game-card" onclick="openModal('Garena Free Fire', 'لعبة باتل رويال حماسية للهواتف. ينزل 50 لاعباً في جزيرة مهجورة ويبحثون عن الأسلحة والمعدات للبقاء على قيد الحياة حتى النهاية.', 'https://www.youtube.com/embed/14dM23zI3yE', 'https://play.google.com/store/apps/details?id=com.dts.freefireth', 'playstore')">
-                <img src="https://m.media-amazon.com/images/M/MV5BMzlhYjMwYTgtMzc2Mi00Y2I1LTg2N2EtYmFiYmMxMTllYmJhXkEyXkFqcGc@._V1_.jpg" alt="Free Fire">
-                <div class="game-info">
-                    <h3>Garena Free Fire</h3>
-                    <p>احارب من أجل البقاء في مواجهات سريعة ضد 50 لاعباً.</p>
-                    <span class="platform-tag tag-playstore">Google Play</span>
-                </div>
+        <!-- Controls: Search & Filters -->
+        <div class="controls-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" onkeyup="filterGames()" placeholder="🔍 ابحث عن أي لعبة بالاسم...">
             </div>
-
-            <!-- eFootball PES -->
-            <div class="game-card" onclick="openModal('eFootball Mobile', 'محاكي كرة القدم الشهير من Konami. استمتع برسوميات واقعية وتحكم سلس وقم ببناء فريق أحلامك بأبرز نجوم العالم.', 'https://www.youtube.com/embed/5a3jN19HqQc', 'https://play.google.com/store/apps/details?id=jp.konami.pesam', 'playstore')">
-                <img src="https://gamingonphone.com/wp-content/uploads/2023/09/eFootball-2024-Mobile-cover.jpg" alt="eFootball PES">
-                <div class="game-info">
-                    <h3>eFootball PES Mobile</h3>
-                    <p>تجربة كرة قدم حقيقية ومباريات حماسية أونلاين.</p>
-                    <span class="platform-tag tag-playstore">Google Play</span>
-                </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="setCategory('all', this)">الكل</button>
+                <button class="filter-btn" onclick="setCategory('featured-sec', this)">⭐ الأكثر شعبية</button>
+                <button class="filter-btn" onclick="setCategory('playstore-sec', this)">📱 Google Play</button>
+                <button class="filter-btn" onclick="setCategory('steam-sec', this)">💻 Steam</button>
+                <button class="filter-btn" onclick="setCategory('epic-sec', this)">⚡ Epic Games</button>
             </div>
+        </div>
 
-            <!-- FIFA Mobile -->
-            <div class="game-card" onclick="openModal('EA SPORTS FC Mobile (FIFA)', 'ابنِ فريقك المفضل في لعبة EA SPORTS FC Mobile، ونافس في البطولات العالمية مع تحديثات ومواسم مستمرة.', 'https://www.youtube.com/embed/qK75fXpYJzM', 'https://play.google.com/store/apps/details?id=com.ea.gp.fifamobile', 'playstore')">
-                <img src="https://drop.ndtv.com/TECH/product_database/images/928202372728PM_635_ea_sports_fc_mobile.jpeg" alt="FIFA Mobile">
-                <div class="game-info">
-                    <h3>EA SPORTS FC Mobile</h3>
-                    <p>لعبة كرة القدم الرسمية ببطولات وترخيصات عالمية.</p>
-                    <span class="platform-tag tag-playstore">Google Play</span>
+        <!-- 1. القائمة الرئيسية (10 ألعاب مختلطة ومختارة) -->
+        <div id="featured-sec" class="game-section">
+            <h2 id="featured" class="section-title">⭐ قائمة الألعاب المميزة (المختارة)</h2>
+            <section class="games-grid">
+                
+                <div class="game-card" data-title="GTA V Grand Theft Auto" onclick="openModal('Grand Theft Auto V', 'واحدة من أشهر ألعاب العالم المفتوح، تحكم بثلاث شخصيات في مدينة لوس سانتوس المليئة بالإثارة والمهام الممتعة.', 'https://www.youtube.com/embed/QkkoHAzjinY', 'https://store.epicgames.com/p/grand-theft-auto-v', 'epic', 'RAM: 8GB | GPU: GTX 660 | CPU: Intel Core i5')">
+                    <img src="https://cdn2.unrealengine.com/egs-gta-vanilla-header-1920x1080-1920x1080-353239328.jpg" alt="GTA V">
+                    <div class="game-info">
+                        <h3>GTA V</h3>
+                        <div class="platform-tag tag-epic">Epic Games</div>
+                        <div class="game-meta">
+                            <span class="rating">⭐ 4.8</span>
+                            <span class="price-badge">مدفوعة</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-        </section>
-
-        <!-- قسم ألعاب Steam -->
-        <h2 id="steam" class="section-title">💻 ألعاب Steam للكمبيوتر</h2>
-        <section class="games-grid">
-            
-            <!-- EA SPORTS FC 27 -->
-            <div class="game-card" onclick="openModal('EA SPORTS FC 27', 'أحدث إصدارات سلسلة كرة القدم الشهيرة على الكمبيوتر بجرافيك فائق ومحاكاة تكتيكية متطورة وميزات أونلاين محسنة.', 'https://www.youtube.com/embed/XhP3Xh4L2mA', 'https://store.steampowered.com/app/2195250/EA_SPORTS_FC_24/', 'steam')">
-                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/2195250/header.jpg" alt="EA SPORTS FC">
-                <div class="game-info">
-                    <h3>EA SPORTS FC 27</h3>
-                    <p>تجربة الجيل الجديد لبطولات كرة القدم للكمبيوتر.</p>
-                    <span class="platform-tag tag-steam">Steam</span>
+                <div class="game-card" data-title="PUBG Mobile" onclick="openModal('PUBG Mobile', 'لعبة الباتل رويال الأشهر للهواتف الذكية. اهبط على الجزيرة مع 100 لاعب وقاتل حتى النهاية لتكون الناجي الوحيد.', 'https://www.youtube.com/embed/uCd1K11L13g', 'https://play.google.com/store/apps/details?id=com.tencent.ig', 'playstore', 'المتطلبات: Android 5.1 / RAM 2GB')">
+                    <img src="https://m.media-amazon.com/images/M/MV5BN2EwM2I5OWMtMGFlNS00Mjg2LTg4NmUtY2I3Y2JmZjEwYzc0XkEyXkFqcGc@._V1_.jpg" alt="PUBG Mobile">
+                    <div class="game-info">
+                        <h3>PUBG Mobile</h3>
+                        <div class="platform-tag tag-playstore">Google Play</div>
+                        <div class="game-meta">
+                            <span class="rating">⭐ 4.4</span>
+                            <span class="price-badge">مجانية</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- PES 2027 -->
-            <div class="game-card" onclick="openModal('eFootball 2027 (PES)', 'نسخة الكمبيوتر من لعبة Konami لكرة القدم. تحسينات كبيرة في أسلوب اللعب والفيزياء والملاعب ثلاثية الأبعاد.', 'https://www.youtube.com/embed/Jm2q3aB9FqA', 'https://store.steampowered.com/app/1665460/eFootball/', 'steam')">
-                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1665460/header.jpg" alt="PES 2027">
-                <div class="game-info">
-                    <h3>eFootball 2027 (PES)</h3>
-                    <p>محاكاة جبارة للعبة كرة القدم على منصة ستيم.</p>
-                    <span class="platform-tag tag-steam">Steam</span>
+                <div class="game-card" data-title="Counter-Strike 2 CS2" onclick="openModal('Counter-Strike 2', 'التحديث الجذري للعبة الشوتر الجماعية الأشهر في التاريخ، بفيزياء ورسوميات متطورة على محرك Source 2.', 'https://www.youtube.com/embed/c80dVYzo6Ao', 'https://store.steampowered.com/app/730/CounterStrike_2/', 'steam', 'RAM: 8GB | GPU: GTX 1060 | CPU: Core i5-7500')">
+                    <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg" alt="CS2">
+                    <div class="game-info">
+                        <h3>Counter-Strike 2</h3>
+                        <div class="platform-tag tag-steam">Steam</div>
+                        <div class="game-meta">
+                            <span class="rating">⭐ 4.7</span>
+                            <span class="price-badge">مجانية</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Human Fall Flat -->
-            <div class="game-card" onclick="openModal('Human Fall Flat', 'لعبة ألغاز وفيزياء مضحكة وممتعة جداً، يمكنك لعبها فردياً أو مع أصدقائك لتجاوز العقبات في عوالم غريبة.', 'https://www.youtube.com/embed/2_84X9JjFmg', 'https://store.steampowered.com/app/477160/Human_Fall_Flat/', 'steam')">
-                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/477160/header.jpg" alt="Human Fall Flat">
-                <div class="game-info">
-                    <h3>Human: Fall Flat</h3>
-                    <p>لعبة فيزياء وألغاز جماعية مليئة بالمرح والضحك.</p>
-                    <span class="platform-tag tag-steam">Steam</span>
+                <div class="game-card" data-title="Fortnite" onclick="openModal('Fortnite', 'لعبة الباتل رويال العالمية مع إمكانية البناء والأحداث الحية المستمرة والمواسم المتجددة.', 'https://www.youtube.com/embed/2gUtfBmw86Y', 'https://store.epicgames.com/p/fortnite', 'epic', 'RAM: 8GB | GPU: GTX 960 | CPU: Core i5-7300U')">
+                    <img src="https://cdn2.unrealengine.com/14br-pve-social-1920x1080-1920x1080-827823330.jpg" alt="Fortnite">
+                    <div class="game-info">
+                        <h3>Fortnite</h3>
+                        <div class="platform-tag tag-epic">Epic Games</div>
+                        <div class="game-meta">
+                            <span class="rating">⭐ 4.6</span>
+                            <span class="price-badge">مجانية</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-        </section>
+                <div class="game-card" data-title="Elden Ring" onclick="openModal('Elden Ring', 'ملحمة الأكشن والأربيجى من FromSoftware في عالم مفتوح مليء بالمخاطر والتحديات الأسطورية.', 'https://www.youtube.com/embed/E3Huy2cdih0', 'https://store.steampowered.com/app/1245620/ELDEN_RING/', 'steam', 'RAM: 12GB | GPU: GTX 1060 | CPU: Core i5-8400')">
+                    <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg" alt="Elden Ring">
+                    <div class="game-info">
+                        <h3>Elden Ring</h3>
+                        <div class="platform-tag tag-steam">Steam</div>
+                        <div class="game-meta">
+                            <span class="rating">⭐ 4.9</span>
+                            <span class="price-badge">مدفوعة</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-card" data-title="Free Fire" onclick="openModal('Garena Free Fire', 'لعبة باتل رويال حماسية وسريعة للهواتف الذكية مع مواجهات تستمر 10 دقائق.', 'https://www.youtube.com/embed/14dM23zI3yE', 'https://play.google.com/store/apps/details?id=com.dts.freefireth', 'playstore', 'المتطلبات: Android 4.4 / RAM 2GB')">
+                    <img src="https://m.media-amazon.com/images/M/MV5BMzlhYjMwYTgtMzc2Mi00Y2I1LTg2N2EtYmFiYmMxMTllYmJhXkEyXkFqcGc@._V1_.jpg" alt="Free Fire">
+                    <div class="game-info">
+                        <h3>Free Fire</h3>
+                        <div class="platform-tag tag-playstore">Google Play</div>
+                        <div class="game-meta">
+                            <span class="rating">⭐ 4.3</span>
+                            <span class="price-badge">مجانية</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-card" data-title="Red Dead Redemption 2 RDR2" onclick="openModal('Red Dead Redemption 2', 'قصة ملحمية عن الكاوبوي ورعاة البقر في أمريكا عام 1899 بجرافيك مذهل وعالم حي وتفاعلي.', 'https://www.youtube.com/embed/eaW0tYxi8eU', 'https://store.epicgames.com/p/red-dead-redemption-2', 'epic', 'RAM: 12GB | GPU: GTX 1060 | CPU: Core i7-4770K')">
+                    <img src="https://cdn2.unrealengine.com/egs-reddeadredemption2-rockstargames-g1a-00-1920x1080-d9d20c5d5e16.jpg" alt="RDR 2">
+                    <div class="game-info">
+                        <h3>Red Dead Redemption 2</h3>
+                        <div class="platform-tag tag-epic">Epic Games</div>
+                        <div class="game-meta">
+                            <span class="rating">⭐ 4.9</span>
+                            <span class="price-badge">مدفوعة</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-card" data-title="Rocket League" onclick="openModal('Rocket League', 'لعبة كرة قدم بالسيارات فائقة السرعة مع فيزياء ممتعة وأجواء تنافسية مشوقة.', 'https://www.youtube.com/embed/SgSX3gZej60', 'https://store.epicgames.com/p/rocket-league', 'epic', 'RAM: 4GB | GPU: GTX 660 | CPU: Core i3-3220')">
+                    <img src="https://cdn2.unrealengine.com/egs-rocketleague-psyonixllc-s1-1920x1080-c20202611a43.jpg" alt="Rocket League">
+                    <div class="game-info">
+                        <h3>Rocket League</h3>
+                        <div class="platform-tag tag-epic">Epic Games</div>
+                        <div class="game-meta">
+                            <span class="rating">⭐ 4.6</span>
+                            <span class="price-badge">مجانية</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-card" data-title="eFootball PES" onclick="openModal('eFootball Mobile', 'محاكي كرة القدم الشهير من Konami للجيل الجديد برسميات ممتازة وتحكم واقعي.', 'https://www.youtube.com/embed/5a3jN19HqQc', 'https://play.google.com/store/apps/details?id=jp.konami.pesam', 'playstore', 'المتطلبات: Android 7.0 / RAM 4GB')">
+                    <img src="https://gamingonphone.com/wp-content/uploads/2023/09/eFootball-2024-Mobile-cover.jpg" alt="eFootball">
+                    <div class="game-info">
+                        <h3>eFootball Mobile</h3>
+                        <div class="platform-tag tag-playstore">Google Play</div>
+                        <div class="game-meta">
+                            <span class="rating">⭐ 4.2</span>
+                            <span class="price-badge">مجانية</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-card" data-title="Apex Legends" onclick="openModal('Apex Legends', 'لعبة باتل رويال مستقبلية تعتمد على الشخصيات ذات القدرات الخاصة والقتال السريع الجماعي.', 'https://www.youtube.com/embed/oJqa4y58gVM', 'https://store.steampowered.com/app/1172470/Apex_Legends/', 'steam', 'RAM: 8GB | GPU: GTX 970 | CPU: Core i5-3570K')">
+                    <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg" alt="Apex Legends">
+                    <div class="game-info">
+                        <h3>Apex Legends</h3>
+                        <div class="platform-tag tag-steam">Steam</div>
+                        <div class="game-meta">
+                            <span class="rating">⭐ 4.5</span>
+                            <span class="price-badge">مجانية</span>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+        <!-- 2. قسم ألعاب Play Store (20 لعبة) -->
+        <div id="playstore-sec" class="game-section">
+            <h2 id="playstore" class="section-title">📱 ألعاب Google Play Store (20 لعبة)</h2>
+            <section class="games-grid">
+                <div class="game-card" data-title="Subway Surfers" onclick="openModal('Subway Surfers', 'لعبة الركض اللانهائي الشهيرة، اهرب من المفتش والكلب وجمع القطع النقدية.', 'https://www.youtube.com/embed/f19fct3fO_Y', 'https://play.google.com/store/apps/details?id=com.kiloo.subwaysurf', 'playstore', 'Android 5.0+')"><img src="https://play-lh.googleusercontent.com/y1vO9m6QOaV5lV-_mQO4-0Xf4t5e.jpg" alt="Subway"><div class="game-info"><h3>Subway Surfers</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Call of Duty Mobile COD" onclick="openModal('Call of Duty Mobile', 'تجربة كول أوف ديوتي الكاملة على الهاتف مع طور الباتل رويال والطور الجماعي.', 'https://www.youtube.com/embed/n492b49oG-o', 'https://play.google.com/store/apps/details?id=com.activision.callofduty.shooter', 'playstore', 'RAM 3GB+')"><img src="https://m.media-amazon.com/images/M/MV5BN2EwM2I5OWMtMGFlNS00Mjg2LTg4NmUtY2I3Y2JmZjEwYzc0XkEyXkFqcGc@._V1_.jpg" alt="COD Mobile"><div class="game-info"><h3>COD Mobile</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.5</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Minecraft Mobile" onclick="openModal('Minecraft', 'ابنِ، استكشف، وابقَ على قيد الحياة في عالم غير محدود من الكتل المكعبة.', 'https://www.youtube.com/embed/MmB9b5njVbA', 'https://play.google.com/store/apps/details?id=com.mojang.minecraftpe', 'playstore', 'RAM 2GB+')"><img src="https://play-lh.googleusercontent.com/VSwHQ1L939yL.jpg" alt="Minecraft"><div class="game-info"><h3>Minecraft</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.8</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Clash of Clans" onclick="openModal('Clash of Clans', 'ابنِ قريتك، قد قبيلتك للمجد، وشارِك في حروب القبائل الحماسية.', 'https://www.youtube.com/embed/y2kGq_0pP-E', 'https://play.google.com/store/apps/details?id=com.supercell.clashofclans', 'playstore', 'Android 5.0+')"><img src="https://play-lh.googleusercontent.com/L_yp2vA.jpg" alt="Clash of Clans"><div class="game-info"><h3>Clash of Clans</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.7</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Clash Royale" onclick="openModal('Clash Royale', 'لعبة استراتيجية ومواجهات بطاقات مباشرة مع لاعبين من مختلف أنحاء العالم.', 'https://www.youtube.com/embed/1v0j5n51eJk', 'https://play.google.com/store/apps/details?id=com.supercell.clashroyale', 'playstore', 'Android 5.0+')"><img src="https://play-lh.googleusercontent.com/r_1wY.jpg" alt="Clash Royale"><div class="game-info"><h3>Clash Royale</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.4</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Asphalt 9 Legends" onclick="openModal('Asphalt 9: Legends', 'سباقات سيارات خارقة وسريعة بجرافيك سينمائي ومسارات خيالية.', 'https://www.youtube.com/embed/kK3f3J12l-g', 'https://play.google.com/store/apps/details?id=com.gameloft.anmp.asphalt9', 'playstore', 'RAM 4GB+')"><img src="https://play-lh.googleusercontent.com/Asphalt9.jpg" alt="Asphalt 9"><div class="game-info"><h3>Asphalt 9</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.5</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Roblox Mobile" onclick="openModal('Roblox', 'عالم افتراضي يتيح لك اللعب وإنشاء تجاربك الخاصة مع ملايين اللاعبين.', 'https://www.youtube.com/embed/eAvXhNJhsA0', 'https://play.google.com/store/apps/details?id=com.roblox.client', 'playstore', 'Android 5.0+')"><img src="https://play-lh.googleusercontent.com/Roblox.jpg" alt="Roblox"><div class="game-info"><h3>Roblox</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.4</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Genshin Impact Mobile" onclick="openModal('Genshin Impact', 'لعبة عالم مفتوح وأربيجى مع شخصيات وقدرات سحرية وجرافيك أنمي ساحر.', 'https://www.youtube.com/embed/HLUY1nICNSY', 'https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact', 'playstore', 'RAM 4GB+')"><img src="https://play-lh.googleusercontent.com/Genshin.jpg" alt="Genshin Impact"><div class="game-info"><h3>Genshin Impact</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Among Us Mobile" onclick="openModal('Among Us', 'لعبة الخداع والذكاء الجماعية، اكتشف الخائن في مركبة الفضاء.', 'https://www.youtube.com/embed/NSJ4cESNQfE', 'https://play.google.com/store/apps/details?id=com.innersloth.spacemafia', 'playstore', 'Android 5.0+')"><img src="https://play-lh.googleusercontent.com/AmongUs.jpg" alt="Among Us"><div class="game-info"><h3>Among Us</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.2</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="EA SPORTS FC Mobile FIFA" onclick="openModal('EA SPORTS FC Mobile', 'لعبة كرة القدم الرسمية مع أحدث التشكيلات والبطولات العالمية.', 'https://www.youtube.com/embed/qK75fXpYJzM', 'https://play.google.com/store/apps/details?id=com.ea.gp.fifamobile', 'playstore', 'RAM 3GB+')"><img src="https://drop.ndtv.com/TECH/product_database/images/928202372728PM_635_ea_sports_fc_mobile.jpeg" alt="FC Mobile"><div class="game-info"><h3>EA FC Mobile</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.1</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Candy Crush Saga" onclick="openModal('Candy Crush Saga', 'لعبة الألغاز الشهيرة المكونة من مطابقة الحلوى في آلاف المراحل.', 'https://www.youtube.com/embed/g2g-1u7x678', 'https://play.google.com/store/apps/details?id=com.king.candycrushsaga', 'playstore', 'Android 4.4+')"><img src="https://play-lh.googleusercontent.com/CandyCrush.jpg" alt="Candy Crush"><div class="game-info"><h3>Candy Crush</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Brawl Stars" onclick="openModal('Brawl Stars', 'قتال سريع ثلاثي الأبعاد مع أبطال متعددين وقدرات خاصة ممتعة.', 'https://www.youtube.com/embed/uD31jI_gWxE', 'https://play.google.com/store/apps/details?id=com.supercell.brawlstars', 'playstore', 'Android 5.0+')"><img src="https://play-lh.googleusercontent.com/BrawlStars.jpg" alt="Brawl Stars"><div class="game-info"><h3>Brawl Stars</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.5</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Stumble Guys" onclick="openModal('Stumble Guys', 'لعبة العقبات والتنافس الجماعي المرحة والمشابهة للعبة Fall Guys.', 'https://www.youtube.com/embed/J7j0k0jS2k8', 'https://play.google.com/store/apps/details?id=com.kitka.stumbleguys', 'playstore', 'Android 5.1+')"><img src="https://play-lh.googleusercontent.com/StumbleGuys.jpg" alt="Stumble Guys"><div class="game-info"><h3>Stumble Guys</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.3</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Ludo King" onclick="openModal('Ludo King', 'لعبة اللودو الكلاسيكية الشهيرة للعب مع الأصدقاء والعائلة أونلاين.', 'https://www.youtube.com/embed/1v0j5n51eJk', 'https://play.google.com/store/apps/details?id=com.ludo.king', 'playstore', 'Android 4.4+')"><img src="https://play-lh.googleusercontent.com/LudoKing.jpg" alt="Ludo King"><div class="game-info"><h3>Ludo King</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.3</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Hill Climb Racing" onclick="openModal('Hill Climb Racing', 'سباق التلال القائم على الفيزياء الممتعة وقيادة السيارات المختلفة.', 'https://www.youtube.com/embed/9G12345678', 'https://play.google.com/store/apps/details?id=com.fingersoft.hillclimb', 'playstore', 'Android 4.4+')"><img src="https://play-lh.googleusercontent.com/HillClimb.jpg" alt="Hill Climb"><div class="game-info"><h3>Hill Climb Racing</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.4</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="8 Ball Pool" onclick="openModal('8 Ball Pool', 'لعبة البلياردو رقم 1 في العالم مع تحديات وأولمبيادات أونلاين.', 'https://www.youtube.com/embed/8ballpoolvideo', 'https://play.google.com/store/apps/details?id=com.miniclip.eightballpool', 'playstore', 'Android 4.4+')"><img src="https://play-lh.googleusercontent.com/8ballpool.jpg" alt="8 Ball Pool"><div class="game-info"><h3>8 Ball Pool</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.5</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Shadow Fight 2" onclick="openModal('Shadow Fight 2', 'لعبة قتال ظلال وتجميع أسلحة كلاسيكية بأسلوب نينجا مميز.', 'https://www.youtube.com/embed/sf2video', 'https://play.google.com/store/apps/details?id=com.nekki.shadowfight', 'playstore', 'Android 4.4+')"><img src="https://play-lh.googleusercontent.com/ShadowFight2.jpg" alt="Shadow Fight 2"><div class="game-info"><h3>Shadow Fight 2</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Need for Speed No Limits" onclick="openModal('NFS No Limits', 'سباقات الشوارع وتعديل السيارات من شركة EA بجرافيك عالي.', 'https://www.youtube.com/embed/nfsvideo', 'https://play.google.com/store/apps/details?id=com.ea.game.nfs14_row', 'playstore', 'RAM 3GB+')"><img src="https://play-lh.googleusercontent.com/NFSNoLimits.jpg" alt="NFS No Limits"><div class="game-info"><h3>NFS No Limits</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.3</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Vector" onclick="openModal('Vector', 'لعبة الباركور والهروب الشهيرة في عالم مستقبلي حماسي.', 'https://www.youtube.com/embed/vectorvideo', 'https://play.google.com/store/apps/details?id=com.nekki.vector', 'playstore', 'Android 4.4+')"><img src="https://play-lh.googleusercontent.com/Vector.jpg" alt="Vector"><div class="game-info"><h3>Vector</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.4</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Plants vs Zombies" onclick="openModal('Plants vs. Zombies', 'لعبة الدفاع عن البرج الكلاسيكية، احمِ منزلك من الزومبي باستخدام النباتات.', 'https://www.youtube.com/embed/pvzvideo', 'https://play.google.com/store/apps/details?id=com.ea.game.pvzfree_row', 'playstore', 'Android 4.4+')"><img src="https://play-lh.googleusercontent.com/PvZ.jpg" alt="Plants vs Zombies"><div class="game-info"><h3>Plants vs Zombies</h3><div class="platform-tag tag-playstore">Google Play</div><div class="game-meta"><span class="rating">⭐ 4.5</span><span class="price-badge">مجانية</span></div></div></div>
+            </section>
+        </div>
+
+        <!-- 3. قسم ألعاب Steam (20 لعبة) -->
+        <div id="steam-sec" class="game-section">
+            <h2 id="steam" class="section-title">💻 ألعاب Steam (20 لعبة)</h2>
+            <section class="games-grid">
+                <div class="game-card" data-title="Dota 2" onclick="openModal('Dota 2', 'لعبة الـ MOBA الأسطورية التنافسية من Valve مع مئات الأبطال.', 'https://www.youtube.com/embed/-cSFPIwMEq4', 'https://store.steampowered.com/app/570/Dota_2/', 'steam', 'RAM: 8GB | GPU: GTX 660')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg" alt="Dota 2"><div class="game-info"><h3>Dota 2</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.7</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="PUBG Battlegrounds PC" onclick="openModal('PUBG: BATTLEGROUNDS', 'النسخة الأصلية من لعبة الباتل رويال على الكمبيوتر.', 'https://www.youtube.com/embed/4rG9noT3a24', 'https://store.steampowered.com/app/578080/PUBG_BATTLEGROUNDS/', 'steam', 'RAM: 16GB | GPU: GTX 1060')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg" alt="PUBG PC"><div class="game-info"><h3>PUBG PC</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.3</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Rust" onclick="openModal('Rust', 'لعبة النجاة القاسية ضد اللاعبين الآخرين والبيئة المحيطة.', 'https://www.youtube.com/embed/LGcECozNXEw', 'https://store.steampowered.com/app/252490/Rust/', 'steam', 'RAM: 16GB | GPU: GTX 1070')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/252490/header.jpg" alt="Rust"><div class="game-info"><h3>Rust</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Cyberpunk 2077" onclick="openModal('Cyberpunk 2077', 'مغامرة أربيجى في عالم مستقبلي مفتوح ومظلم في مدينة نايت سيتي.', 'https://www.youtube.com/embed/8X2kIfS6fb8', 'https://store.steampowered.com/app/1091500/Cyberpunk_2077/', 'steam', 'RAM: 12GB | GPU: GTX 1060')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg" alt="Cyberpunk 2077"><div class="game-info"><h3>Cyberpunk 2077</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.5</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="The Witcher 3 Wild Hunt" onclick="openModal('The Witcher 3', 'ملحمة جيرالت من ريفيا في أفضل ألعاب الأربيجى بالعالم المفتوح.', 'https://www.youtube.com/embed/XHrskk4wZ3E', 'https://store.steampowered.com/app/292030/The_Witcher_3_Wild_Hunt/', 'steam', 'RAM: 8GB | GPU: GTX 770')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg" alt="The Witcher 3"><div class="game-info"><h3>The Witcher 3</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.9</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Euro Truck Simulator 2 ETS2" onclick="openModal('Euro Truck Simulator 2', 'محاكي قيادة الشاحنات الأفضل للتنقل عبر الدول والمدن الأوروبية.', 'https://www.youtube.com/embed/xlT6tlhnhBU', 'https://store.steampowered.com/app/227300/Euro_Truck_Simulator_2/', 'steam', 'RAM: 8GB | GPU: GTX 760')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/227300/header.jpg" alt="ETS2"><div class="game-info"><h3>Euro Truck Sim 2</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.8</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Terraria" onclick="openModal('Terraria', 'لعبة البناء والنجاة والاستكشاف ثنائية الأبعاد المليئة بالأسرار.', 'https://www.youtube.com/embed/w7uOhFTrrq0', 'https://store.steampowered.com/app/105600/Terraria/', 'steam', 'RAM: 4GB | GPU: 256MB VRAM')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/105600/header.jpg" alt="Terraria"><div class="game-info"><h3>Terraria</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.8</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Human Fall Flat" onclick="openModal('Human Fall Flat', 'لعبة ألغاز وفيزياء مضحكة وممتعة جداً للعب الجماعي.', 'https://www.youtube.com/embed/2_84X9JjFmg', 'https://store.steampowered.com/app/477160/Human_Fall_Flat/', 'steam', 'RAM: 4GB | GPU: GTX 1050')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/477160/header.jpg" alt="Human Fall Flat"><div class="game-info"><h3>Human Fall Flat</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Left 4 Dead 2 L4D2" onclick="openModal('Left 4 Dead 2', 'لعبة قتال الزومبي التعاونية الكلاسيكية الشهيرة من Valve.', 'https://www.youtube.com/embed/94I_BqA348E', 'https://store.steampowered.com/app/550/Left_4_Dead_2/', 'steam', 'RAM: 2GB | GPU: 128MB VRAM')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/550/header.jpg" alt="Left 4 Dead 2"><div class="game-info"><h3>Left 4 Dead 2</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.8</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="ARK Survival Evolved" onclick="openModal('ARK: Survival Evolved', 'عالم الميمز والديناصورات، استأنس الديناصورات وابنِ قاعدتك.', 'https://www.youtube.com/embed/FW9vsrPWujI', 'https://store.steampowered.com/app/346110/ARK_Survival_Evolved/', 'steam', 'RAM: 16GB | GPU: GTX 1060')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/346110/header.jpg" alt="ARK"><div class="game-info"><h3>ARK: Survival</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.4</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Stardew Valley" onclick="openModal('Stardew Valley', 'محاكي الحياة والزراعة الممتع والهادئ بأسلوب البكسل الأنيق.', 'https://www.youtube.com/embed/ot7uXNQsk00', 'https://store.steampowered.com/app/413150/Stardew_Valley/', 'steam', 'RAM: 2GB | GPU: 256MB')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg" alt="Stardew Valley"><div class="game-info"><h3>Stardew Valley</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.9</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Warframe" onclick="openModal('Warframe', 'لعبة شوتر مستقبلية للنينجا الفضائيين مليئة بالأكشن مجانية.', 'https://www.youtube.com/embed/Q66S1_kXvCg', 'https://store.steampowered.com/app/230410/Warframe/', 'steam', 'RAM: 8GB | GPU: GTX 750')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/230410/header.jpg" alt="Warframe"><div class="game-info"><h3>Warframe</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Palworld" onclick="openModal('Palworld', 'لعبة النجاة والوحوش الشهيرة التي تجمع بين البناء والقتال بالأسلحة.', 'https://www.youtube.com/embed/a3_m27E86gM', 'https://store.steampowered.com/app/1623730/Palworld/', 'steam', 'RAM: 16GB | GPU: GTX 1060')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1623730/header.jpg" alt="Palworld"><div class="game-info"><h3>Palworld</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="God of War PC" onclick="openModal('God of War', 'رحلة كريتوس وابنه أتريوس في العالم النوردي بجرافيك أسطوري.', 'https://www.youtube.com/embed/FyIwEFXOcaE', 'https://store.steampowered.com/app/1593500/God_of_War/', 'steam', 'RAM: 12GB | GPU: GTX 1060')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1593500/header.jpg" alt="God of War"><div class="game-info"><h3>God of War</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.9</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Sea of Thieves" onclick="openModal('Sea of Thieves', 'مغامرة القرصنة البحرية الجماعية في البحار المفتوحة مع الأصدقاء.', 'https://www.youtube.com/embed/r3JboKHcxL8', 'https://store.steampowered.com/app/1172620/Sea_of_Thieves/', 'steam', 'RAM: 8GB | GPU: GTX 1060')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1172620/header.jpg" alt="Sea of Thieves"><div class="game-info"><h3>Sea of Thieves</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.5</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Rainbow Six Siege R6" onclick="openModal('Tom Clancys Rainbow Six Siege', 'لعبة الشوتر التكتيكية والمواجهات داخل المباني المنظمة.', 'https://www.youtube.com/embed/KlbLLRdg9u8', 'https://store.steampowered.com/app/359550/Tom_Clancys_Rainbow_Six_Siege/', 'steam', 'RAM: 8GB | GPU: GTX 960')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/359550/header.jpg" alt="R6 Siege"><div class="game-info"><h3>Rainbow Six Siege</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.5</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Payday 2" onclick="openModal('PAYDAY 2', 'لعبة التخطيط لعمليات السرقات والبنوك الجماعية المليئة بالتحدي.', 'https://www.youtube.com/embed/Gb-_DKCzyAQ', 'https://store.steampowered.com/app/218620/PAYDAY_2/', 'steam', 'RAM: 8GB | GPU: GTX 560')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/218620/header.jpg" alt="Payday 2"><div class="game-info"><h3>PAYDAY 2</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Phasmophobia" onclick="openModal('Phasmophobia', 'لعبة الرعب والتحقيق في الأشباح بالصوت والتفاعل الجماعي.', 'https://www.youtube.com/embed/sRa9oeo5KiY', 'https://store.steampowered.com/app/739630/Phasmophobia/', 'steam', 'RAM: 8GB | GPU: GTX 1060')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/739630/header.jpg" alt="Phasmophobia"><div class="game-info"><h3>Phasmophobia</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.7</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Unturned" onclick="openModal('Unturned', 'لعبة النجاة من الزومبي الخفيفة والمجانية ذات الرسوميات البسيطة.', 'https://www.youtube.com/embed/343434343', 'https://store.steampowered.com/app/304930/Unturned/', 'steam', 'RAM: 4GB | GPU: GTX 750')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/304930/header.jpg" alt="Unturned"><div class="game-info"><h3>Unturned</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.4</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Hollow Knight" onclick="openModal('Hollow Knight', 'تحفة ألعاب المغامرات والاستكشاف الثنائية الأبعاد في عالم الممالك الحشرية.', 'https://www.youtube.com/embed/UAO2urG23S4', 'https://store.steampowered.com/app/367520/Hollow_Knight/', 'steam', 'RAM: 4GB | GPU: 9800 GTX')"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/367520/header.jpg" alt="Hollow Knight"><div class="game-info"><h3>Hollow Knight</h3><div class="platform-tag tag-steam">Steam</div><div class="game-meta"><span class="rating">⭐ 4.9</span><span class="price-badge">مدفوعة</span></div></div></div>
+            </section>
+        </div>
+
+        <!-- 4. قسم ألعاب Epic Games (20 لعبة) -->
+        <div id="epic-sec" class="game-section">
+            <h2 id="epic" class="section-title">⚡ ألعاب Epic Games Store (20 لعبة)</h2>
+            <section class="games-grid">
+                <div class="game-card" data-title="Fall Guys" onclick="openModal('Fall Guys', 'لعبة التنافس الكوميدي والمراحل المليئة بالمصائد والعقبات.', 'https://www.youtube.com/embed/z6UrdUAZ7wM', 'https://store.epicgames.com/p/fall-guys', 'epic', 'RAM: 8GB | GPU: GTX 660')"><img src="https://cdn2.unrealengine.com/egs-fallguys-mediatonic-s1-1920x1080-827823330.jpg" alt="Fall Guys"><div class="game-info"><h3>Fall Guys</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.5</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Alan Wake 2" onclick="openModal('Alan Wake 2', 'لعبة الرعب النفسي والغموض بجرافيك استثنائي وقصة مشوقة.', 'https://www.youtube.com/embed/dlQ3FeNu5L0', 'https://store.epicgames.com/p/alan-wake-2', 'epic', 'RAM: 16GB | GPU: RTX 2060')"><img src="https://cdn2.unrealengine.com/egs-alanwake2-remedyentertainment-s1-1920x1080.jpg" alt="Alan Wake 2"><div class="game-info"><h3>Alan Wake 2</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.8</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Dead by Daylight DBD" onclick="openModal('Dead by Daylight', 'لعبة الرعب التنافسية (4 ضد 1)، اهرب من القاتل أو كن أنت القاتل.', 'https://www.youtube.com/embed/JTc2g_L0fs8', 'https://store.epicgames.com/p/dead-by-daylight', 'epic', 'RAM: 8GB | GPU: GTX 760')"><img src="https://cdn2.unrealengine.com/egs-deadbydaylight-behaviourinteractive-s1-1920x1080.jpg" alt="DBD"><div class="game-info"><h3>Dead by Daylight</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.4</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Genshin Impact PC Epic" onclick="openModal('Genshin Impact (PC)', 'نسخة الكمبيوتر من لعبة الأربيجى الشهيرة على منصة إيبيك.', 'https://www.youtube.com/embed/HLUY1nICNSY', 'https://store.epicgames.com/p/genshin-impact', 'epic', 'RAM: 8GB | GPU: GT 1030')"><img src="https://cdn2.unrealengine.com/egs-genshinimpact-mihoyo-s1-1920x1080.jpg" alt="Genshin PC"><div class="game-info"><h3>Genshin Impact PC</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Honkai Star Rail" onclick="openModal('Honkai: Star Rail', 'مغامرة الفضاء والأربيجى القائم على الأدوار من مطوري جينشين.', 'https://www.youtube.com/embed/w8vPZrMFiZ4', 'https://store.epicgames.com/p/honkai-star-rail', 'epic', 'RAM: 8GB | GPU: GTX 650')"><img src="https://cdn2.unrealengine.com/egs-honkaistarrail-hoyoverse-s1-1920x1080.jpg" alt="Honkai Star Rail"><div class="game-info"><h3>Honkai: Star Rail</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.7</span><span class="price-badge">مجانية</span></div></div></div>
+                <div class="game-card" data-title="Borderlands 3" onclick="openModal('Borderlands 3', 'لعبة الشوتر والأسلحة المجنونة مع أطنان من الأسلحة والقتال الممتع.', 'https://www.youtube.com/embed/d9Gu1PspA3Y', 'https://store.epicgames.com/p/borderlands-3', 'epic', 'RAM: 6GB | GPU: GTX 680')"><img src="https://cdn2.unrealengine.com/egs-borderlands3-gearboxsoftware-s1-1920x1080.jpg" alt="Borderlands 3"><div class="game-info"><h3>Borderlands 3</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.5</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Control" onclick="openModal('Control', 'لعبة الأكشن والقدرات الخارقة في مبنى مكتبي غامض يكسر قوانين الفيزياء.', 'https://www.youtube.com/embed/F74LLDhAhIg', 'https://store.epicgames.com/p/control', 'epic', 'RAM: 8GB | GPU: GTX 780')"><img src="https://cdn2.unrealengine.com/egs-control-remedyentertainment-s1-1920x1080.jpg" alt="Control"><div class="game-info"><h3>Control</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Far Cry 6" onclick="openModal('Far Cry 6', 'قد الثورة ضد الحاكم المستبد في جزيرة يارا الاستوائية المليئة بالقتال.', 'https://www.youtube.com/embed/-IJuKT1mHO8', 'https://store.epicgames.com/p/far-cry-6', 'epic', 'RAM: 8GB | GPU: GTX 960')"><img src="https://cdn2.unrealengine.com/egs-farcry6-ubisoft-s1-1920x1080.jpg" alt="Far Cry 6"><div class="game-info"><h3>Far Cry 6</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.3</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Assassins Creed Valhalla" onclick="openModal('Assassins Creed Valhalla', 'عيش حياة المحارب الفايكنج واغزُ الممالك الإنجليزية القديمة.', 'https://www.youtube.com/embed/ssrNcwxALS4', 'https://store.epicgames.com/p/assassins-creed-valhalla', 'epic', 'RAM: 8GB | GPU: GTX 960')"><img src="https://cdn2.unrealengine.com/egs-assassinscreedvalhalla-ubisoft-s1-1920x1080.jpg" alt="AC Valhalla"><div class="game-info"><h3>AC Valhalla</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.5</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="HITMAN 3 World of Assassination" onclick="openModal('HITMAN 3', 'ادخل عالم اغتيالات العميل 47 الاحترافي في مختلف مدن العالم.', 'https://www.youtube.com/embed/R_Ob-f4S1D8', 'https://store.epicgames.com/p/hitman-3', 'epic', 'RAM: 8GB | GPU: GTX 660')"><img src="https://cdn2.unrealengine.com/egs-hitman3-ioi-s1-1920x1080.jpg" alt="Hitman 3"><div class="game-info"><h3>HITMAN 3</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.7</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Death Stranding" onclick="openModal('Death Stranding', 'تحفة هيديو كوجيما في إعادة توصيل العالم المدمر ونقل الإمدادات.', 'https://www.youtube.com/embed/tCI396HyhbQ', 'https://store.epicgames.com/p/death-stranding', 'epic', 'RAM: 8GB | GPU: GTX 1050 Ti')"><img src="https://cdn2.unrealengine.com/egs-deathstranding-kojimaproductions-s1-1920x1080.jpg" alt="Death Stranding"><div class="game-info"><h3>Death Stranding</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Metro Exodus" onclick="openModal('Metro Exodus', 'رحلة البقاء في روسيا المدمرة بعد الحرب النووية في محطات المترو.', 'https://www.youtube.com/embed/g3xS-U52g30', 'https://store.epicgames.com/p/metro-exodus', 'epic', 'RAM: 8GB | GPU: GTX 1050')"><img src="https://cdn2.unrealengine.com/egs-metroexodus-4agames-s1-1920x1080.jpg" alt="Metro Exodus"><div class="game-info"><h3>Metro Exodus</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.7</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Sifu" onclick="openModal('Sifu', 'لعبة الكونغ فو والفنون القتالية الواقعية مع ميكانيكية التقدم في السن.', 'https://www.youtube.com/embed/14dM23zI3yE', 'https://store.epicgames.com/p/sifu', 'epic', 'RAM: 8GB | GPU: GTX 660')"><img src="https://cdn2.unrealengine.com/egs-sifu-sloclap-s1-1920x1080.jpg" alt="Sifu"><div class="game-info"><h3>Sifu</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.7</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Kena Bridge of Spirits" onclick="openModal('Kena: Bridge of Spirits', 'مغامرة ساحرة تجمع بين القتال الأنيق والاستكشاف في طبيعة خيالية.', 'https://www.youtube.com/embed/f4-vJqA37z4', 'https://store.epicgames.com/p/kena-bridge-of-spirits', 'epic', 'RAM: 12GB | GPU: GTX 1060')"><img src="https://cdn2.unrealengine.com/egs-kenabridgeofspirits-emberlab-s1-1920x1080.jpg" alt="Kena"><div class="game-info"><h3>Kena: Spirits</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Subnautica" onclick="openModal('Subnautica', 'استكشف أعماق المحيط الفضائي الغريب وابنِ قاعدتك البحرية للنجاة.', 'https://www.youtube.com/embed/cRDAEC483Ew', 'https://store.epicgames.com/p/subnautica', 'epic', 'RAM: 8GB | GPU: GTX 550 Ti')"><img src="https://cdn2.unrealengine.com/egs-subnautica-unknownworlds-s1-1920x1080.jpg" alt="Subnautica"><div class="game-info"><h3>Subnautica</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.8</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Overcooked 2" onclick="openModal('Overcooked! 2', 'لعبة إعداد الطعام الجماعية المليئة بالفوضى والضحك مع الأصدقاء.', 'https://www.youtube.com/embed/0I8Gz3T0v40', 'https://store.epicgames.com/p/overcooked-2', 'epic', 'RAM: 4GB | GPU: GTX 630')"><img src="https://cdn2.unrealengine.com/egs-overcooked2-team17-s1-1920x1080.jpg" alt="Overcooked 2"><div class="game-info"><h3>Overcooked! 2</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.6</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Outlast" onclick="openModal('Outlast', 'تجربة الرعب النفسي والهروب بالكاميرا في مستشفى المجانين المظلم.', 'https://www.youtube.com/embed/uKA-IA4q03U', 'https://store.epicgames.com/p/outlast', 'epic', 'RAM: 4GB | GPU: GTX 460')"><img src="https://cdn2.unrealengine.com/egs-outlast-redbarrelsgames-s1-1920x1080.jpg" alt="Outlast"><div class="game-info"><h3>Outlast</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.7</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="World War Z" onclick="openModal('World War Z', 'مواجهة أعداد هائلة من الزومبي السريعين في قتال جماعي حماسي.', 'https://www.youtube.com/embed/kK3f3J12l-g', 'https://store.epicgames.com/p/world-war-z', 'epic', 'RAM: 8GB | GPU: GTX 650')"><img src="https://cdn2.unrealengine.com/egs-worldwarz-saberinteractive-s1-1920x1080.jpg" alt="WWZ"><div class="game-info"><h3>World War Z</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.4</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="Star Wars Jedi Fallen Order" onclick="openModal('Star Wars Jedi: Fallen Order', 'مغامرة الجيداي بالسيف الضوئي وقدرات القوة في عالم ستار وورز.', 'https://www.youtube.com/embed/0GLbwkfhYZk', 'https://store.epicgames.com/p/star-wars-jedi-fallen-order', 'epic', 'RAM: 8GB | GPU: GTX 650 Ti')"><img src="https://cdn2.unrealengine.com/egs-starwarsjedifallenorder-respawn-s1-1920x1080.jpg" alt="Jedi Fallen Order"><div class="game-info"><h3>Jedi Fallen Order</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.7</span><span class="price-badge">مدفوعة</span></div></div></div>
+                <div class="game-card" data-title="ARK Survival Ascended" onclick="openModal('ARK: Survival Ascended', 'النسخة المُحسنة والمبنية على محرك Unreal Engine 5 للعبة آرك.', 'https://www.youtube.com/embed/14dM23zI3yE', 'https://store.epicgames.com/p/ark-survival-ascended', 'epic', 'RAM: 16GB | GPU: RTX 2070')"><img src="https://cdn2.unrealengine.com/egs-arksurvivalascended-studiowildcard-s1-1920x1080.jpg" alt="ARK Ascended"><div class="game-info"><h3>ARK Ascended</h3><div class="platform-tag tag-epic">Epic Games</div><div class="game-meta"><span class="rating">⭐ 4.3</span><span class="price-badge">مدفوعة</span></div></div></div>
+            </section>
+        </div>
+
     </main>
 
     <!-- Modal Popup Window -->
@@ -342,36 +635,53 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()">&times;</button>
             <h2 id="modalTitle" class="modal-title">اسم اللعبة</h2>
-            <p id="modalDescription" class="modal-description">وصف اللعبة سيظهر هنا...</p>
+            <p id="modalDescription" class="modal-description">وصف اللعبة...</p>            
             
+            <div id="modalSysReq" class="sys-req">
+                <strong>💡 متطلبات التشغيل / الملاحظات:</strong> <span id="reqText">...</span>
+            </div>
+
             <div class="video-container">
                 <iframe id="modalVideo" src="" title="Gameplay Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
 
-            <a id="modalDownload" href="#" target="_blank" class="btn-action">رابط اللعبة 🚀</a>
+            <div class="modal-actions">
+                <a id="modalDownload" href="#" target="_blank" class="btn-action">رابط اللعبة 🚀</a>
+                <button class="btn-action btn-share" onclick="shareGame()">🔗 مشاركة</button>
+            </div>
         </div>
     </div>
 
+    <button class="top-btn" onclick="scrollToTop()">↑</button>
+
     <footer>
-        <p>&copy; 2026 جميع الحقوق محفوظة - متجر الألعاب</p>
+        <p>&copy; 2026 جميع الحقوق محفوظة - GameHub الجزائر</p>
     </footer>
 
     <script>
-        function openModal(title, description, videoUrl, storeLink, platform) {
+        let currentStoreLink = "";
+
+        function openModal(title, description, videoUrl, storeLink, platform, sysReq = "غير محدد") {
+            currentStoreLink = storeLink;
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalDescription').innerText = description;
+            document.getElementById('reqText').innerText = sysReq;
             
-            document.getElementById('modalVideo').src = videoUrl + "?autoplay=1";
+            // Fix autoplay blocked sound issue
+            document.getElementById('modalVideo').src = videoUrl;
             
             let downloadBtn = document.getElementById('modalDownload');
             downloadBtn.href = storeLink;
 
             if (platform === 'playstore') {
-                downloadBtn.innerText = 'تحميل اللعبة من Google Play Store 🟢';
+                downloadBtn.innerText = 'تحميل من Google Play 🟢';
                 downloadBtn.className = 'btn-action btn-playstore';
-            } else {
-                downloadBtn.innerText = 'فتح صفحة اللعبة على Steam 🔵';
+            } else if (platform === 'steam') {
+                downloadBtn.innerText = 'فتح في متجر Steam 🔵';
                 downloadBtn.className = 'btn-action btn-steam';
+            } else {
+                downloadBtn.innerText = 'فتح في Epic Games Store 🟠';
+                downloadBtn.className = 'btn-action btn-epic';
             }
             
             document.getElementById('gameModal').style.display = 'flex';
@@ -386,6 +696,52 @@
             let modal = document.getElementById('gameModal');
             if (event.target == modal) {
                 closeModal();
+            }
+        }
+
+        // Search Engine
+        function filterGames() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementsByClassName('game-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                let searchData = cards[i].getAttribute('data-title').toLowerCase();
+                if (searchData.includes(input)) {
+                    cards[i].style.display = "flex";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // Category Filter
+        function setCategory(catId, btnElement) {
+            let buttons = document.getElementsByClassName('filter-btn');
+            for (let b of buttons) b.classList.remove('active');
+            btnElement.classList.add('active');
+
+            let sections = document.getElementsByClassName('game-section');
+            if (catId === 'all') {
+                for (let s of sections) s.style.display = 'block';
+            } else {
+                for (let s of sections) {
+                    if (s.id === catId) {
+                        s.style.display = 'block';
+                    } else {
+                        s.style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shareGame() {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(currentStoreLink);
+                alert("تم نسخ رابط اللعبة إلى الحافظة! 📋");
             }
         }
     </script>
